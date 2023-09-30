@@ -1,0 +1,28 @@
+create_context_for_AI.py
+context.txt
+tasks.md
+.idea
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
+__pycache__/
+*.egg-info/
+.cache/
+.Python
+
+# SQLite database files
+*.sqlite3
+db.sqlite3
+
+# Media and static files
+media/
+static/
+
+# Secret files and settings
+*.env
+
+# IDE and editor files/directories
+*.log
+
+# Virtual environment
+.env/
