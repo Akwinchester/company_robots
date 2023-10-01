@@ -1,4 +1,5 @@
 from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render
 from django.views import View
 from .models import Robot
 
@@ -18,3 +19,7 @@ class RobotCreateView(View):
 
        result = HttpResponse('ok')
        return result
+
+    def get(self, request):
+       print('aaaaaaaaaaa')
+       return render(request, 'home.html')

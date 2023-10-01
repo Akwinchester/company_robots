@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <h1>Создание заказа</h1>
+
+<form method="POST">
+  {% csrf_token %}
+
+  {{ form.model_version_id }}
+
+  <button type="submit">Submit</button>
+</form>
+
+{% endblock %}

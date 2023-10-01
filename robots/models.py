@@ -13,9 +13,20 @@ class Robot(models.Model):
         return f"{self.model}-{self.version}"
 
     def clean_and_validate(self, data):
-        if not all(key in data for key in ['model', 'version', 'created']):
+        if not all(key in data for key in ['model', 'version', 'created', 'serial']):
             raise ValidationError("Invalid data provided")
 
         created_date = parse_datetime(data['created'])
         if not created_date:
             raise ValidationError("Invalid date format")
+
+        if not ValidRobot.objects.filter(model=self.model, version=self.version).exists():
+            raise ValidationError(f'Invalid model {self.model} and version {self.version}')
+
+
+class ValidRobot(models.Model):
+    model = models.CharField(max_length=2)
+    version = models.CharField(max_length=2)
+
+    class Meta:
+        unique_together = ('model', 'version')
