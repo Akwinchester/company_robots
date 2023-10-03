@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
 from robots.models import Robot
-from robots.notification_service import NotificationService
+from robots.services.notification_service import NotificationService
 
 
 class Order(models.Model):

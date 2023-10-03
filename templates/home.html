@@ -4,12 +4,13 @@
 
   <h1>Создание заказа</h1>
 
-<form method="POST">
-  {% csrf_token %}
+    <form method="POST">
+      {% csrf_token %}
 
-  {{ form.robot_serial }}
+      {{ form.robot_serial }}
 
-  <button type="submit">Submit</button>
-</form>
+      <button type="submit">Submit</button>
+    </form>
+    <a href="{% url 'download_report' %}">Скачать отчет</a>
 
 {% endblock %}
