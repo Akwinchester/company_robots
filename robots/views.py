@@ -21,5 +21,4 @@ class RobotCreateView(View):
        return result
 
     def get(self, request):
-       print('aaaaaaaaaaa')
        return render(request, 'home.html')

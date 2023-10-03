@@ -1,6 +1,6 @@
 from orders.models import Order
 from robots.models import Robot, ValidRobot
-from customers.models import Customer
+from django.contrib.auth.models import User
 
 
 class OrderService:
@@ -16,7 +16,7 @@ class OrderService:
             return robots.first().id
 
     def create_order(self, robot_id, customer_id):
-        customer = Customer.objects.get(id=customer_id)
+        customer = User.objects.get(id=customer_id)
         robot = Robot.objects.get(id=robot_id)
         order = Order.objects.create(
             robot_serial=f"{robot.model}-{robot.version}",
@@ -31,7 +31,7 @@ class OrderService:
         data = ValidRobot.objects.get(id=model_version_id)
         model = data.model
         version = data.version
-        customer = Customer.objects.get(id=customer_id)
+        customer = User.objects.get(id=customer_id)
         order = Order.objects.create(
             robot_serial=f"{model}-{version}",
             customer=customer,

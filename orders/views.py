@@ -1,5 +1,8 @@
+from django.contrib.auth import logout
+from django.contrib.auth.views import LoginView
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views.generic import FormView
 
 from .forms import OrderForm
@@ -28,19 +31,18 @@ def create_order(request):
         form = OrderForm(request.POST)
 
         if form.is_valid():
-            print(form.cleaned_data)
-            model_version_id = form.cleaned_data['model_version_id']
+            robot_serial_id = form.cleaned_data['robot_serial']
 
-            customer_id = 1
+            customer_id = request.user.id
 
             service = OrderService()
 
-            robot_id = service.check_robot_availability(model_version_id)
+            robot_id = service.check_robot_availability(robot_serial_id)
 
             if robot_id:
                 order = service.create_order(robot_id, customer_id)
             else:
-                order = service.create_waiting_order(model_version_id, customer_id)
+                order = service.create_waiting_order(robot_serial_id, customer_id)
 
             return render(request, 'home.html', {'form': form})
 

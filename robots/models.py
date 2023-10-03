@@ -30,3 +30,6 @@ class ValidRobot(models.Model):
 
     class Meta:
         unique_together = ('model', 'version')
+
+    def __str__(self):
+        return f"{self.model}-{self.version}"
