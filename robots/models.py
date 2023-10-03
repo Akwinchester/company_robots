@@ -1,6 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.db import models
+
 from django.utils.dateparse import parse_datetime
+
 
 
 class Robot(models.Model):
@@ -23,6 +25,15 @@ class Robot(models.Model):
         if not ValidRobot.objects.filter(model=self.model, version=self.version).exists():
             raise ValidationError(f'Invalid model {self.model} and version {self.version}')
 
+
+# def robot_created(sender, instance, created, **kwargs):
+#     if created:
+#         notification = NotificationService()
+#
+#         notification.send_notifications(instance)
+#
+#
+# post_save.connect(robot_created, sender=Robot)
 
 class ValidRobot(models.Model):
     model = models.CharField(max_length=2)
