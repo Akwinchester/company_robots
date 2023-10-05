@@ -23,11 +23,9 @@ class Order(models.Model):
         return f"Order {self.id} - {self.robot} for {self.customer}"
 
 
-def robot_created(sender, instance, created, **kwargs):
-    if created:
-        notification = NotificationService()
-
-        notification.send_notifications(instance, Order)
-
+def robot_created(instance, created, **kwargs):
+  if created:
+    service = NotificationService()
+    service.handle_new_robot(instance, Order)
 
 post_save.connect(robot_created, sender=Robot)

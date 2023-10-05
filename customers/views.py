@@ -1,3 +1,4 @@
+from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.views.generic import CreateView
@@ -16,6 +17,10 @@ class SignUpView(CreateView):
         user.set_password(form.cleaned_data['password'])
         user.save()
 
+        # Добавляем пользователя в группу
+        buyers_group = Group.objects.get(name='Клиенты')
+        user.groups.add(buyers_group)
+
         login(self.request, user)
 
         return super(SignUpView, self).form_valid(form)
@@ -26,6 +31,17 @@ class LoginUser(LoginView):
     redirect_authenticated_user = True
 
     def get_success_url(self):
+        user = self.request.user
+
+        if user.groups.filter(name='Клиенты').exists():
+            return reverse_lazy('create_order')
+
+        if user.groups.filter(name='Менеджмент').exists():
+            return reverse_lazy('get_report')
+
+        if user.groups.filter(name='Технические специалисты').exists():
+            return reverse_lazy('create_robot')
+
         return reverse_lazy('create_order')
 
 

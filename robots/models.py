@@ -26,14 +26,6 @@ class Robot(models.Model):
             raise ValidationError(f'Invalid model {self.model} and version {self.version}')
 
 
-# def robot_created(sender, instance, created, **kwargs):
-#     if created:
-#         notification = NotificationService()
-#
-#         notification.send_notifications(instance)
-#
-#
-# post_save.connect(robot_created, sender=Robot)
 
 class ValidRobot(models.Model):
     model = models.CharField(max_length=2)

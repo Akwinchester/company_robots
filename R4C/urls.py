@@ -17,9 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from customers.views import LoginUser
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('robots/', include('robots.urls')),
     path('orders/', include('orders.urls')),
     path('customers/', include('customers.urls')),
+    path('accounts/login/', LoginUser.as_view(), name='login_api')
 ]

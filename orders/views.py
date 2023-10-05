@@ -1,52 +1,39 @@
-from django.contrib.auth import logout
-from django.contrib.auth.views import LoginView
-from django.http import JsonResponse
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-from django.views.generic import FormView
+from django.views import View
 
 from .forms import OrderForm
 from .services import OrderService
+from django.contrib import messages
 
 
-# def create_order(request):
-#     model = 'R2'
-#     version = 'D2'
-#     customer_id = 1
-#
-#
-#     service = OrderService()
-#
-#     robot_id = service.check_robot_availability(model, version)
-#
-#     if robot_id:
-#         order = service.create_order(robot_id, customer_id)
-#     else:
-#         order = service.create_waiting_order(model, version, customer_id)
-#
-#     return JsonResponse({'status': 'ok'})
+class OrderView(UserPassesTestMixin, View):
 
-def create_order(request):
-    if request.method == 'POST':
+    def get(self, request):
+        form = OrderForm()
+        return render(request, 'create_order.html', {'form': form})
+
+    def post(self, request):
         form = OrderForm(request.POST)
 
         if form.is_valid():
             robot_serial_id = form.cleaned_data['robot_serial']
-
             customer_id = request.user.id
 
             service = OrderService()
+            order = service.handle_order_creation(
+                robot_serial_id,
+                customer_id
+            )
 
-            robot_id = service.check_robot_availability(robot_serial_id)
+        if order:
+            messages.success(self.request, 'Заказ успешно оформлен. Ожидайте получения')
+        else:
+            messages.success(self.request, f'В данный момент робота нет в наличии. Как только он поступит на склад, мы отправим уведомление на {request.user.email}')
+        return redirect('create_order')
 
-            if robot_id:
-                order = service.create_order(robot_id, customer_id)
-            else:
-                order = service.create_waiting_order(robot_serial_id, customer_id)
+    def test_func(self):
+        if self.request.user.groups.filter(name='Клиенты').exists():
+            return True
 
-            return render(request, 'home.html', {'form': form})
-
-    else:
-        form = OrderForm()
-
-    return render(request, 'home.html', {'form': form})
+        return False

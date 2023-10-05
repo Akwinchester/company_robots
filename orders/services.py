@@ -39,3 +39,13 @@ class OrderService:
             notified=False
         )
         return order
+
+    def handle_order_creation(self, robot_serial_id, customer_id):
+        robot_id = self.check_robot_availability(robot_serial_id)
+
+        if robot_id:
+            self.create_order(robot_id, customer_id)
+            return True
+        else:
+            self.create_waiting_order(robot_serial_id, customer_id)
+            return False

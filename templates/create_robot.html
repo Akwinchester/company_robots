@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="post" style="text-align: center">
+
+  {% csrf_token %}
+
+  <label>Робот:</label>
+
+  <select name="serial">
+    {% for id, name in form.ROBOT_CHOICES %}
+      <option value="{{name}}">{{name}}</option>
+    {% endfor %}
+  </select>
+
+  <label>Дата создания:</label>
+  <input type="datetime-local" name="created">
+
+  <input type="submit" value="Создать">
+
+</form>
+  {% if form.errors %}
+    <p style="text-align: left">Ошибка: {{ form.errors }}</p>
+  {% endif %}
+    {% if messages %}
+<ul class="info">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}
