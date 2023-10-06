@@ -21,18 +21,6 @@ class RobotCreateView(UserPassesTestMixin, FormView):
     form_class = RobotForm
     template_name = 'create_robot.html'
 
-    # def post(self, request):
-    #     """
-    #     Обрабатывает POST запрос на создание робота
-    #     """
-    #     robot_service = RobotService()
-    #     if request.content_type == 'application/json':
-    #         json_data = request.body
-    #         robot_service.create_from_json(json_data)
-    #         return HttpResponse('Робот успешно добавлен в БД.')
-    #     else:
-    #         return super().post(request)
-
     def form_valid(self, form):
         """
         Сохраняет данные формы в БД
