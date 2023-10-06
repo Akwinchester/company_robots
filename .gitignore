@@ -26,3 +26,4 @@ static/
 
 # Virtual environment
 .env/
+/R4C/config.py
