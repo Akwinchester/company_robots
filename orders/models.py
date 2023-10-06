@@ -12,7 +12,8 @@ class Order(models.Model):
         ('available', '1'),
         ('waiting', '0')
     )
-    robot_serial = models.CharField(max_length=5,blank=False, null=False)
+
+    robot_serial = models.CharField(max_length=5, blank=False, null=False)
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
     robot = models.ForeignKey(Robot, on_delete=models.CASCADE, null=True)
     order_date = models.DateTimeField(auto_now_add=True)
@@ -20,12 +21,13 @@ class Order(models.Model):
     notified = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Order {self.id} - {self.robot} for {self.customer}"
+        return f"Заказ {self.id} - {self.robot} для {self.customer}"
 
 
-def robot_created(instance, created, **kwargs):
-  if created:
-    service = NotificationService()
-    service.handle_new_robot(instance, Order)
+def robot_created_handler(instance, created, **kwargs):
+    if created:
+        service = NotificationService()
+        service.handle_new_robot(instance, Order)
 
-post_save.connect(robot_created, sender=Robot)
+
+post_save.connect(robot_created_handler, sender=Robot)

@@ -8,12 +8,17 @@ from django.contrib import messages
 
 
 class OrderView(UserPassesTestMixin, View):
+    """
+    Представление для создания заказа
+    """
 
     def get(self, request):
+        """Отображает форму создания заказа"""
         form = OrderForm()
         return render(request, 'create_order.html', {'form': form})
 
     def post(self, request):
+        """Обрабатывает отправку формы и создание заказа"""
         form = OrderForm(request.POST)
 
         if form.is_valid():
@@ -27,13 +32,18 @@ class OrderView(UserPassesTestMixin, View):
             )
 
         if order:
-            messages.success(self.request, 'Заказ успешно оформлен. Ожидайте получения')
+            messages.success(
+                self.request,
+                'Заказ успешно оформлен. Ожидайте получения'
+            )
         else:
-            messages.success(self.request, f'В данный момент робота нет в наличии. Как только он поступит на склад, мы отправим уведомление на {request.user.email}')
+            messages.success(
+                self.request,
+                f'В данный момент робота нет в наличии. Как только он поступит на склад, мы отправим уведомление на {request.user.email}'
+            )
+
         return redirect('create_order')
 
     def test_func(self):
-        if self.request.user.groups.filter(name='Клиенты').exists():
-            return True
-
-        return False
+        """Проверяет, что пользователь в группе Клиенты"""
+        return self.request.user.groups.filter(name='Клиенты').exists()

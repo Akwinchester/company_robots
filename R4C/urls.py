@@ -24,5 +24,6 @@ urlpatterns = [
     path('robots/', include('robots.urls')),
     path('orders/', include('orders.urls')),
     path('customers/', include('customers.urls')),
-    path('accounts/login/', LoginUser.as_view(), name='login_api')
+    path('accounts/login/', LoginUser.as_view(), name='login_api'),
+    path('', LoginUser.as_view(), name='login'),
 ]

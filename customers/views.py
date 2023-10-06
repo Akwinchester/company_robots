@@ -17,13 +17,13 @@ class SignUpView(CreateView):
         user.set_password(form.cleaned_data['password'])
         user.save()
 
-        # Добавляем пользователя в группу
+        # Добавление нового пользователя в группу "Клиенты"
         buyers_group = Group.objects.get(name='Клиенты')
         user.groups.add(buyers_group)
 
         login(self.request, user)
 
-        return super(SignUpView, self).form_valid(form)
+        return super().form_valid(form)
 
 
 class LoginUser(LoginView):

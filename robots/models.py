@@ -1,11 +1,11 @@
 from django.core.exceptions import ValidationError
 from django.db import models
-
 from django.utils.dateparse import parse_datetime
 
 
-
 class Robot(models.Model):
+    """Модель Robot - робот"""
+
     serial = models.CharField(max_length=5, blank=False, null=False)
     model = models.CharField(max_length=2, blank=False, null=False)
     version = models.CharField(max_length=2, blank=False, null=False)
@@ -15,19 +15,22 @@ class Robot(models.Model):
         return f"{self.model}-{self.version}"
 
     def clean_and_validate(self, data):
+        """Валидирует данные при создании Robot"""
         if not all(key in data for key in ['model', 'version', 'created', 'serial']):
-            raise ValidationError("Invalid data provided")
+            raise ValidationError("Некорректные данные")
 
         created_date = parse_datetime(data['created'])
         if not created_date:
-            raise ValidationError("Invalid date format")
+            raise ValidationError("Неверный формат даты")
 
-        if not ValidRobot.objects.filter(model=self.model, version=self.version).exists():
-            raise ValidationError(f'Invalid model {self.model} and version {self.version}')
-
+        if not ValidRobot.objects.filter(model=self.model,
+                                         version=self.version).exists():
+            raise ValidationError(f"Недопустимая модель {self.model} и версия {self.version}")
 
 
 class ValidRobot(models.Model):
+    """Модель допустимых моделей и версий роботов"""
+
     model = models.CharField(max_length=2)
     version = models.CharField(max_length=2)
 
