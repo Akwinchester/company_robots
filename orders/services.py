@@ -64,7 +64,7 @@ class OrderService:
 
         if robot_id:
             self.create_order(robot_id, customer_id)
-            return True
+            return 'Заказ успешно оформлен. Ожидайте получения'
         else:
             self.create_waiting_order(robot_serial_id, customer_id)
-            return False
+            return  'В данный момент робота нет в наличии. Как только он поступит на склад, мы отправим уведомление на email'

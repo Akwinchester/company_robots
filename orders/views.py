@@ -26,21 +26,9 @@ class OrderView(UserPassesTestMixin, View):
             customer_id = request.user.id
 
             service = OrderService()
-            order = service.handle_order_creation(
-                robot_serial_id,
-                customer_id
-            )
+            order_message = service.handle_order_creation(robot_serial_id, customer_id)
 
-        if order:
-            messages.success(
-                self.request,
-                'Заказ успешно оформлен. Ожидайте получения'
-            )
-        else:
-            messages.success(
-                self.request,
-                f'В данный момент робота нет в наличии. Как только он поступит на склад, мы отправим уведомление на {request.user.email}'
-            )
+            messages.success(self.request, order_message)
 
         return redirect('create_order')
 
