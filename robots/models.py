@@ -27,6 +27,14 @@ class Robot(models.Model):
                                          version=self.version).exists():
             raise ValidationError(f"Недопустимая модель {self.model} и версия {self.version}")
 
+    def clean(self):
+        if not self.serial:
+            raise ValidationError('Serial is required')
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
 
 class ValidRobot(models.Model):
     """Модель допустимых моделей и версий роботов"""
